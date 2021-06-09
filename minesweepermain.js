@@ -5,7 +5,7 @@ import { TILE_STATUSES, createBoard, markTile, revealTile } from './minesweeper.
 const BOARD_SIZE = 10
 const NUMBER_OF_MINES = 10
 
-const board = createBoard (BOARD_SIZE,NUMBER_OF_MINES)
+const board = createBoard (BOARD_SIZE, NUMBER_OF_MINES)
 const boardElement = document.querySelector('.board')
 const minesLeftText = document.querySelector('[data-mine-count]')
 
@@ -13,7 +13,7 @@ board.forEach(row =>  {
     row.forEach(tile => {
         boardElement.append(tile.element)
         tile.element.addEventListener('click',() => {
-            revealTile(tile)
+            revealTile(board, tile)
         })
         tile.element.addEventListener('contextmenu', e => {
             e.preventDefault()

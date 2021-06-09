@@ -1,10 +1,10 @@
 // Logic
 
 export const TILE_STATUSES = {
-    HIDDEN: 'hidden',
-    Mine: 'mine',
-    NUMBER: 'number',
-    MARKED: 'marked',
+    HIDDEN: "hidden",
+    MINE: "mine",
+    NUMBER: "number",
+    MARKED: "marked",
 }
 
 export function createBoard(boardSize, numberOfMines) {
@@ -15,16 +15,16 @@ export function createBoard(boardSize, numberOfMines) {
     for(let x=0; x < boardSize; x++) {
         const row = []
         for(let y=0; y < boardSize; y++) {
-            const element = document.createElement('div')
+            const element = document.createElement("div")
             element.dataset.status = TILE_STATUSES.HIDDEN
 
             const tile = {
                 element, 
                 x,
                 y,
-                mine: minePositions.some(positionMatch.bind(null, {x, y })), 
+                mine: minePositions.some(positionMatch.bind(null, { x, y })), 
                 get status() {
-                    return element.dataset.status
+                    return this.element.dataset.status
                 },
                 set status(value) {
                     this.element.dataset.status = value
@@ -52,7 +52,7 @@ export function markTile(tile){
     }
 }
 
-export function revealTile(tile){
+export function revealTile(board, tile){
     if (tile.status !== TILE_STATUSES.HIDDEN){
         return
     }
@@ -63,6 +63,7 @@ export function revealTile(tile){
     }
 
     tile.status = TILE_STATUSES.NUMBER
+    const adjacentTiles = nearbyTiles(board, tile)
 }
 
 
@@ -73,7 +74,7 @@ function getMinePositions(boardSize, numberOfMines) {
     while (positions.length < numberOfMines) {
         const position = {
             x: randomNumber(boardSize),
-            y: randomNumber(boardSize)
+            y: randomNumber(boardSize),
         }
 
         if(!positions.some(positionMatch.bind(null,position))){
@@ -86,11 +87,27 @@ function getMinePositions(boardSize, numberOfMines) {
 
 }
 
-function positionMatch(a,b){
+function positionMatch(a, b){
     return a.x === b.x && a.y === b.y
 }
 
 function randomNumber(size) {
     return Math.floor(Math.random() * size)
 
+}
+
+function nearbyTiles(board, { x, y }){
+    const tiles =[]
+
+
+
+    for(let xOffset = -1; xOffset <= 1; xOffset++){
+        for(let yOffset = -1; yOffset <= 1; yOffset++){
+            const tile = board[x + xOffset][y + yOffset]
+            tiles.push(tile)
+
+        }
+    }
+
+    return tiles
 }
